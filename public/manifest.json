@@ -1,0 +1,95 @@
+{
+  "name": "La Barbiere - Jönköpings finaste frisörsalong",
+  "short_name": "La Barbiere",
+  "description": "Professionella frisörbehandlingar i Jönköping. Klippning, färgning, styling och skägg. Boka din behandling online.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "lang": "sv",
+  "categories": ["beauty", "lifestyle", "wellness", "health"],
+  "icons": [
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "36x36",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Boka klippning",
+      "short_name": "Klippning",
+      "description": "Boka professionell klippning",
+      "url": "/?category=klippning",
+      "icons": [
+        {
+          "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Boka färgning", 
+      "short_name": "Färgning",
+      "description": "Boka hårfärgning och behandlingar",
+      "url": "/?category=fargning",
+      "icons": [
+        {
+          "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Ring oss",
+      "short_name": "Ring",
+      "description": "Ring La Barbiere direkt",
+      "url": "tel:0365505311",
+      "icons": [
+        {
+          "src": "/La-barbiere-logga-1000-x-500-px-1024x512.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
