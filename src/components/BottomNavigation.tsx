@@ -41,7 +41,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 
   return (
     <motion.div 
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
+      className="bottom-navigation fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
+      style={{ zIndex: 9999 }} // NAVIGATION BAR - SECOND HIGHEST Z-INDEX (BELOW IFRAME MODAL)
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ 
