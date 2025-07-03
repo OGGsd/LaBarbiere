@@ -43,7 +43,15 @@ export default defineConfig({
                 maxEntries: 20,
                 maxAgeSeconds: 60 * 60 * 24 // 1 day
               },
-              networkTimeoutSeconds: 10
+              networkTimeoutSeconds: 10,
+              // Background sync for booking attempts
+              plugins: [
+                {
+                  cacheKeyWillBeUsed: async ({ request }) => {
+                    return `${request.url}?timestamp=${Date.now()}`;
+                  }
+                }
+              ]
             }
           },
           {
@@ -95,9 +103,11 @@ export default defineConfig({
         ],
         skipWaiting: true,
         clientsClaim: true,
-        // Handle offline scenarios separately
+        // Enhanced offline support
         offlineGoogleAnalytics: false,
-        cleanupOutdatedCaches: true
+        cleanupOutdatedCaches: true,
+        // Background sync support
+        mode: 'production'
       },
       includeAssets: [
         'La-barbiere-logga-1000-x-500-px-1024x512.png',
@@ -110,25 +120,19 @@ export default defineConfig({
         theme_color: '#000000',
         background_color: '#ffffff',
         display: 'standalone',
+        display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         orientation: 'portrait-primary',
         scope: '/',
         start_url: '/',
-        categories: ['beauty', 'lifestyle', 'wellness', 'health'],
+        categories: ['beauty', 'lifestyle', 'wellness', 'health', 'business'],
         lang: 'sv',
+        dir: 'ltr',
+        prefer_related_applications: false,
+        edge_side_panel: {
+          preferred_width: 400
+        },
         icons: [
-          // Icons with "any" purpose
-          {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
-            sizes: '36x36',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
-            sizes: '48x48',
-            type: 'image/png',
-            purpose: 'any'
-          },
+          // Icons with "any" purpose - SEPARATE ENTRIES
           {
             src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '72x72',
@@ -143,13 +147,31 @@ export default defineConfig({
           },
           {
             src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '128x128',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any'
           },
           {
             src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '152x152',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '384x384',
             type: 'image/png',
             purpose: 'any'
           },
@@ -159,10 +181,22 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'any'
           },
-          // Separate icons with "maskable" purpose
+          // Icons with "maskable" purpose - SEPARATE ENTRIES
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '72x72',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
           {
             src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '96x96',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '128x128',
             type: 'image/png',
             purpose: 'maskable'
           },
@@ -174,7 +208,19 @@ export default defineConfig({
           },
           {
             src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '152x152',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '384x384',
             type: 'image/png',
             purpose: 'maskable'
           },
@@ -194,7 +240,8 @@ export default defineConfig({
             icons: [
               {
                 src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
-                sizes: '96x96'
+                sizes: '96x96',
+                type: 'image/png'
               }
             ]
           },
@@ -206,7 +253,8 @@ export default defineConfig({
             icons: [
               {
                 src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
-                sizes: '96x96'
+                sizes: '96x96',
+                type: 'image/png'
               }
             ]
           },
@@ -218,9 +266,50 @@ export default defineConfig({
             icons: [
               {
                 src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
-                sizes: '96x96'
+                sizes: '96x96',
+                type: 'image/png'
               }
             ]
+          },
+          {
+            name: 'Om oss',
+            short_name: 'Info',
+            description: 'Läs mer om La Barbiere',
+            url: '/?tab=om-oss',
+            icons: [
+              {
+                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+                sizes: '96x96',
+                type: 'image/png'
+              }
+            ]
+          }
+        ],
+        share_target: {
+          action: '/',
+          method: 'GET',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url'
+          }
+        },
+        protocol_handlers: [
+          {
+            protocol: 'tel',
+            url: 'tel:%s'
+          }
+        ],
+        handle_links: 'preferred',
+        launch_handler: {
+          client_mode: 'navigate-existing'
+        },
+        file_handlers: [
+          {
+            action: '/',
+            accept: {
+              'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+            }
           }
         ]
       },
