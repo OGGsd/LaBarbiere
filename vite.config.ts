@@ -100,98 +100,112 @@ export default defineConfig({
         cleanupOutdatedCaches: true
       },
       includeAssets: [
-        'logo.png',
+        'La-barbiere-logga-1000-x-500-px-1024x512.png',
         'offline.html'
       ],
       manifest: {
-        name: 'Massage Corner Sverige AB',
-        short_name: 'Massage Corner',
-        description: 'Vårda din kropp med en härlig massage. Professionell massage i Jönköping - boka din behandling online.',
-        theme_color: '#059669',
-        background_color: '#059669',
+        name: 'La Barbiere - Jönköpings finaste frisörsalong',
+        short_name: 'La Barbiere',
+        description: 'Professionella frisörbehandlingar i Jönköping. Klippning, färgning, styling och skägg. Boka din behandling online.',
+        theme_color: '#000000',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait-primary',
         scope: '/',
         start_url: '/',
-        categories: ['health', 'wellness', 'lifestyle', 'medical'],
+        categories: ['beauty', 'lifestyle', 'wellness', 'health'],
         lang: 'sv',
         icons: [
+          // Icons with "any" purpose
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '36x36',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '48x48',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '72x72',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '96x96',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '144x144',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png', 
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          // Separate icons with "maskable" purpose
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '96x96',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '144x144',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png', 
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ],
         shortcuts: [
           {
-            name: 'Boka medicinsk massage',
-            short_name: 'Medicinsk',
-            description: 'Boka medicinsk massage med ultraljudbehandling',
-            url: '/?category=medicinsk',
+            name: 'Boka klippning',
+            short_name: 'Klippning',
+            description: 'Boka professionell klippning',
+            url: '/?category=klippning',
             icons: [
               {
-                src: '/logo.png',
+                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
                 sizes: '96x96'
               }
             ]
           },
           {
-            name: 'Boka klassisk massage', 
-            short_name: 'Klassisk',
-            description: 'Boka djupgående klassisk massage',
-            url: '/?category=klassisk',
+            name: 'Boka färgning', 
+            short_name: 'Färgning',
+            description: 'Boka hårfärgning och behandlingar',
+            url: '/?category=fargning',
             icons: [
               {
-                src: '/logo.png',
-                sizes: '96x96'
-              }
-            ]
-          },
-          {
-            name: 'Integritetspolicy',
-            short_name: 'Integritet',
-            description: 'Läs vår integritetspolicy',
-            url: '/integritetspolicy',
-            icons: [
-              {
-                src: '/logo.png',
+                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
                 sizes: '96x96'
               }
             ]
@@ -199,11 +213,11 @@ export default defineConfig({
           {
             name: 'Ring oss',
             short_name: 'Ring',
-            description: 'Ring Massage Corner direkt',
-            url: 'tel:0731759567',
+            description: 'Ring La Barbiere direkt',
+            url: 'tel:0365505311',
             icons: [
               {
-                src: '/logo.png',
+                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
                 sizes: '96x96'
               }
             ]
