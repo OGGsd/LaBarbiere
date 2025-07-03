@@ -244,7 +244,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   return (
     <AnimatePresence>
       <motion.div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex flex-col"
+        className="fixed inset-0 bg-black bg-opacity-50 flex flex-col"
+        style={{ zIndex: 999999 }} // Maximum z-index to ensure it's at the very front
         variants={modalVariants}
         initial="hidden"
         animate="visible"
@@ -252,7 +253,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
       >
         {/* Minimized Header with enhanced animation */}
         <motion.div 
-          className="bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-4 py-2 flex items-center justify-between shadow-lg relative z-[10000] h-12 flex-shrink-0"
+          className="bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-4 py-2 flex items-center justify-between shadow-lg relative h-12 flex-shrink-0"
+          style={{ zIndex: 1000000 }} // Even higher z-index for header
           variants={headerVariants}
         >
           <div className="flex items-center min-w-0 flex-1">
@@ -329,7 +331,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           style={{ 
             height: 'calc(100vh - 68px)',
             maxHeight: 'calc(100vh - 68px)',
-            minHeight: 'calc(100vh - 68px)'
+            minHeight: 'calc(100vh - 68px)',
+            zIndex: 999998 // High z-index for content area
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -339,7 +342,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           <AnimatePresence>
             {isLoading && (
               <motion.div 
-                className="absolute inset-0 flex items-center justify-center bg-white z-10"
+                className="absolute inset-0 flex items-center justify-center bg-white"
+                style={{ zIndex: 999999 }} // Ensure loading state is visible
                 variants={loadingVariants}
                 initial="hidden"
                 animate="visible"
@@ -383,7 +387,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           <AnimatePresence>
             {!isOnline && (
               <motion.div 
-                className="absolute inset-0 flex items-center justify-center bg-white z-20 p-4"
+                className="absolute inset-0 flex items-center justify-center bg-white p-4"
+                style={{ zIndex: 1000000 }} // Highest z-index for offline state
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -433,7 +438,8 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           <AnimatePresence>
             {hasError && isOnline && (
               <motion.div 
-                className="absolute inset-0 flex items-center justify-center bg-white z-10 p-4"
+                className="absolute inset-0 flex items-center justify-center bg-white p-4"
+                style={{ zIndex: 1000000 }} // Highest z-index for error state
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -497,6 +503,7 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
                 height: '100%',
                 minHeight: '100%',
                 maxHeight: '100%',
+                zIndex: 999997, // Lower than overlays but higher than background
                 // iOS Safari optimizations
                 WebkitOverflowScrolling: 'touch',
                 overflow: 'auto'

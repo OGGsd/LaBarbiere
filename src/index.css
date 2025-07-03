@@ -39,6 +39,8 @@ body.iframe-modal-open {
   position: relative;
   display: flex;
   flex-direction: column;
+  /* CRITICAL: Maximum z-index to ensure iframe modal is at the very front */
+  z-index: 999999 !important;
 }
 
 .iframe-container iframe {
@@ -67,6 +69,8 @@ body.iframe-modal-open {
   /* Ensure iframe content can scroll */
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  /* High z-index but lower than overlays */
+  z-index: 999997 !important;
 }
 
 /* iOS Safari specific iframe optimizations */
@@ -83,6 +87,8 @@ body.iframe-modal-open {
     position: relative;
     display: flex;
     flex-direction: column;
+    /* Maximum z-index for iOS Safari */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
@@ -99,6 +105,8 @@ body.iframe-modal-open {
     /* Ensure iframe reaches exact bottom */
     position: relative;
     display: block;
+    /* High z-index for iOS */
+    z-index: 999997 !important;
   }
 }
 
@@ -130,6 +138,8 @@ iframe {
     height: calc(100vh - 68px) !important;
     max-height: calc(100vh - 68px) !important;
     min-height: calc(100vh - 68px) !important;
+    /* Maximum z-index in PWA mode */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
@@ -140,6 +150,8 @@ iframe {
     height: 100% !important;
     max-height: 100% !important;
     min-height: 100% !important;
+    /* High z-index in PWA mode */
+    z-index: 999997 !important;
   }
   
   /* Hide any potential browser UI */
@@ -166,6 +178,8 @@ body {
     /* Ensure no extra spacing */
     padding: 0;
     margin: 0;
+    /* Maximum z-index on mobile */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
@@ -179,6 +193,8 @@ body {
     /* Ensure exact positioning */
     position: relative;
     display: block;
+    /* High z-index on mobile */
+    z-index: 999997 !important;
   }
   
   /* Ensure modal takes full screen on mobile */
@@ -200,12 +216,16 @@ body {
     height: calc(100vh - 68px) !important;
     min-height: calc(100vh - 68px) !important;
     max-height: calc(100vh - 68px) !important;
+    /* Maximum z-index in landscape */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
     height: 100% !important;
     min-height: 100% !important;
     max-height: 100% !important;
+    /* High z-index in landscape */
+    z-index: 999997 !important;
   }
 }
 
@@ -223,14 +243,21 @@ iframe[title] {
   animation-iteration-count: infinite;
 }
 
-/* High z-index for iframe modal to ensure it overlaps everything */
+/* CRITICAL: Maximum z-index classes for iframe modal components */
 .iframe-modal {
-  z-index: 9999 !important;
+  z-index: 999999 !important;
 }
 
-/* Ensure iframe modal header stays on top */
 .iframe-modal-header {
-  z-index: 10000 !important;
+  z-index: 1000000 !important;
+}
+
+.iframe-modal-overlay {
+  z-index: 1000000 !important;
+}
+
+.iframe-modal-content {
+  z-index: 999998 !important;
 }
 
 /* Mobile-specific touch optimizations */
@@ -240,6 +267,8 @@ iframe[title] {
     /* Optimize for touch */
     -webkit-tap-highlight-color: transparent;
     tap-highlight-color: transparent;
+    /* Maximum z-index on touch devices */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
@@ -248,6 +277,8 @@ iframe[title] {
     tap-highlight-color: transparent;
     /* Prevent touch delay */
     touch-action: manipulation;
+    /* High z-index on touch devices */
+    z-index: 999997 !important;
   }
 }
 
@@ -258,11 +289,15 @@ iframe[title] {
     /* Adjust for keyboard presence */
     height: calc(100vh - 68px) !important;
     min-height: calc(100vh - 68px) !important;
+    /* Maximum z-index when keyboard is visible */
+    z-index: 999999 !important;
   }
   
   .iframe-container iframe {
     height: 100% !important;
     min-height: 100% !important;
+    /* High z-index when keyboard is visible */
+    z-index: 999997 !important;
   }
 }
 
@@ -284,5 +319,37 @@ iframe[title] {
     height: calc(100vh - 68px) !important;
     min-height: calc(100vh - 68px) !important;
     max-height: calc(100vh - 68px) !important;
+    /* Maximum z-index on iOS Safari */
+    z-index: 999999 !important;
   }
+}
+
+/* Override any potential conflicting z-index values */
+* {
+  /* Ensure nothing can override our iframe modal z-index */
+  z-index: auto;
+}
+
+/* Specific overrides for common high z-index elements */
+.modal,
+.popup,
+.overlay,
+.dropdown,
+.tooltip,
+.notification {
+  z-index: 9999 !important; /* Lower than our iframe modal */
+}
+
+/* Navigation and header elements should be lower */
+nav,
+header,
+.navbar,
+.header {
+  z-index: 1000 !important; /* Much lower than iframe modal */
+}
+
+/* Ensure iframe modal components have the absolute highest z-index */
+[class*="iframe-modal"],
+[class*="booking-iframe"] {
+  z-index: 999999 !important;
 }
