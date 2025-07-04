@@ -296,7 +296,14 @@ const HairBookingPage: React.FC = () => {
         transition={{ duration: 0.3 }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-barbiere-black to-barbiere-dark-gray text-white py-4 px-4 shadow-lg">
+        <motion.div 
+          className="booking-page-header bg-gradient-to-r from-barbiere-black to-barbiere-dark-gray text-white py-4 px-4 shadow-lg transition-all duration-400 ease-out"
+          initial={{ y: 0, opacity: 1 }}
+          style={{ 
+            transform: 'translateY(0)',
+            transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out'
+          }}
+        >
           <div className="max-w-4xl mx-auto flex items-center justify-center">
             <div className="w-20 h-10 bg-white flex items-center justify-center" style={{ borderRadius: '4px' }}>
               <img 
@@ -306,7 +313,7 @@ const HairBookingPage: React.FC = () => {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Content Area */}
         <div className="flex-1 pb-20 overflow-y-auto">

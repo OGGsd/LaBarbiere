@@ -178,9 +178,9 @@ body {
 @media screen and (max-width: 768px) {
   .iframe-container {
     /* Mobile-specific optimizations - exact height calculations */
-    height: calc(100vh - 68px) !important;
-    min-height: calc(100vh - 68px) !important;
-    max-height: calc(100vh - 68px) !important;
+    height: calc(100vh - 48px) !important;
+    min-height: calc(100vh - 48px) !important;
+    max-height: calc(100vh - 48px) !important;
     /* Ensure no extra spacing */
     padding: 0;
     margin: 0;
@@ -213,15 +213,54 @@ body {
     /* Prevent any overflow */
     overflow: hidden !important;
   }
+
+  /* Hide header and navigation animations on mobile */
+  .booking-page-header.hidden {
+    transform: translateY(-100%) !important;
+    opacity: 0 !important;
+  }
+
+  .bottom-navigation.hidden {
+    transform: translateY(100%) !important;
+    opacity: 0 !important;
+  }
 }
 
+/* Tablet viewport optimizations */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .iframe-container {
+    /* Tablet-specific optimizations */
+    height: calc(100vh - 48px) !important;
+    min-height: calc(100vh - 48px) !important;
+    max-height: calc(100vh - 48px) !important;
+    z-index: 999999 !important;
+  }
+  
+  .iframe-container iframe {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    z-index: 999997 !important;
+  }
+
+  /* Hide header and navigation animations on tablet */
+  .booking-page-header.hidden {
+    transform: translateY(-100%) !important;
+    opacity: 0 !important;
+  }
+
+  .bottom-navigation.hidden {
+    transform: translateY(100%) !important;
+    opacity: 0 !important;
+  }
+}
 /* Landscape orientation optimizations */
 @media screen and (orientation: landscape) and (max-height: 500px) {
   .iframe-container {
     /* Landscape mode - ensure iframe still reaches bottom */
-    height: calc(100vh - 68px) !important;
-    min-height: calc(100vh - 68px) !important;
-    max-height: calc(100vh - 68px) !important;
+    height: calc(100vh - 48px) !important;
+    min-height: calc(100vh - 48px) !important;
+    max-height: calc(100vh - 48px) !important;
     /* IFRAME CONTAINER - Maximum z-index in landscape */
     z-index: 999999 !important;
   }
@@ -324,8 +363,8 @@ header,
   /* When keyboard is likely visible */
   .iframe-container {
     /* Adjust for keyboard presence */
-    height: calc(100vh - 68px) !important;
-    min-height: calc(100vh - 68px) !important;
+    height: calc(100vh - 48px) !important;
+    min-height: calc(100vh - 48px) !important;
     /* IFRAME CONTAINER - Maximum z-index when keyboard is visible */
     z-index: 999999 !important;
   }
@@ -353,14 +392,41 @@ header,
   /* iOS Safari viewport height fix */
   .iframe-container {
     /* Use fixed pixel calculation instead of vh on iOS */
-    height: calc(100vh - 68px) !important;
-    min-height: calc(100vh - 68px) !important;
-    max-height: calc(100vh - 68px) !important;
+    height: calc(100vh - 48px) !important;
+    min-height: calc(100vh - 48px) !important;
+    max-height: calc(100vh - 48px) !important;
     /* IFRAME CONTAINER - Maximum z-index on iOS Safari */
     z-index: 999999 !important;
   }
 }
 
+/* Enhanced animation classes for header and navigation hiding */
+.booking-page-header,
+.bottom-navigation {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out !important;
+}
+
+/* Smooth hide animations */
+.booking-page-header.iframe-open {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+}
+
+.bottom-navigation.iframe-open {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+}
+
+/* Ensure smooth show animations */
+.booking-page-header.iframe-closed {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+.bottom-navigation.iframe-closed {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
 /* FORCE Z-INDEX HIERARCHY - CRITICAL OVERRIDES */
 
 /* Ensure iframe modal is ALWAYS at the front */

@@ -16,6 +16,56 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   const loadTimeoutRef = useRef<NodeJS.Timeout>();
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Hide header and navigation on mobile/tablet when iframe opens
+  useEffect(() => {
+    const hideHeaderAndNav = () => {
+      // Hide header (logo/heading section)
+      const header = document.querySelector('.booking-page-header');
+      if (header) {
+        (header as HTMLElement).style.transform = 'translateY(-100%)';
+        (header as HTMLElement).style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        (header as HTMLElement).style.opacity = '0';
+      }
+
+      // Hide bottom navigation
+      const bottomNav = document.querySelector('.bottom-navigation');
+      if (bottomNav) {
+        (bottomNav as HTMLElement).style.transform = 'translateY(100%)';
+        (bottomNav as HTMLElement).style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        (bottomNav as HTMLElement).style.opacity = '0';
+      }
+    };
+
+    const showHeaderAndNav = () => {
+      // Show header
+      const header = document.querySelector('.booking-page-header');
+      if (header) {
+        (header as HTMLElement).style.transform = 'translateY(0)';
+        (header as HTMLElement).style.opacity = '1';
+      }
+
+      // Show bottom navigation
+      const bottomNav = document.querySelector('.bottom-navigation');
+      if (bottomNav) {
+        (bottomNav as HTMLElement).style.transform = 'translateY(0)';
+        (bottomNav as HTMLElement).style.opacity = '1';
+      }
+    };
+
+    // Check if we're on mobile/tablet
+    const isMobileOrTablet = window.innerWidth <= 1024;
+    
+    if (isMobileOrTablet) {
+      // Small delay to ensure DOM is ready
+      setTimeout(hideHeaderAndNav, 100);
+    }
+
+    return () => {
+      if (isMobileOrTablet) {
+        showHeaderAndNav();
+      }
+    };
+  }, []);
   useEffect(() => {
     // Monitor online/offline status
     const handleOnline = () => setIsOnline(true);
@@ -52,8 +102,10 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
     // Calculate and set proper heights
     const updateHeights = () => {
       const vh = window.innerHeight;
-      const headerHeight = 48; // Minimal header height
-      const availableHeight = vh - headerHeight;
+      // On mobile/tablet, use full viewport since header/nav are hidden
+      const isMobileOrTablet = window.innerWidth <= 1024;
+      const headerHeight = isMobileOrTablet ? 48 : 48; // Keep minimal header for iframe controls
+      const availableHeight = isMobileOrTablet ? vh - headerHeight : vh - headerHeight;
       
       if (containerRef.current) {
         containerRef.current.style.height = `${availableHeight}px`;
@@ -251,15 +303,15 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
         animate="visible"
         exit="exit"
       >
-        {/* Minimized Header with enhanced animation */}
+        {/* Compact Header for iframe controls only */}
         <motion.div 
-          className="iframe-modal-header bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-4 py-2 flex items-center justify-between shadow-lg relative h-12 flex-shrink-0"
+          className="iframe-modal-header bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-3 py-2 flex items-center justify-between shadow-lg relative h-12 flex-shrink-0"
           style={{ zIndex: 1000000 }} // HEADER AT THE VERY FRONT
           variants={headerVariants}
         >
           <div className="flex items-center min-w-0 flex-1">
             <motion.div
-              className="w-6 h-6 mr-2 rounded-full bg-white p-0.5 flex-shrink-0 flex items-center justify-center"
+              className="w-5 h-5 mr-2 rounded-full bg-white p-0.5 flex-shrink-0 flex items-center justify-center"
               whileHover={{ rotate: 360, scale: 1.2 }}
               transition={{ duration: 0.6 }}
             >
@@ -271,7 +323,7 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
             </motion.div>
             <div className="min-w-0 flex-1">
               <motion.h2 
-                className="font-bold text-xs truncate"
+                className="font-bold text-xs truncate hidden sm:block"
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -279,7 +331,7 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
                 Säker bokning
               </motion.h2>
               <motion.p 
-                className="text-xs opacity-90 flex items-center truncate"
+                className="text-xs opacity-90 flex items-center truncate hidden md:flex"
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 0.9 }}
                 transition={{ delay: 0.3 }}
@@ -293,7 +345,7 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
             {/* Animated Online/Offline indicator */}
             <motion.div 
-              className="flex items-center"
+              className="flex items-center hidden sm:flex"
               animate={{
                 scale: isOnline ? [1, 1.2, 1] : 1,
                 opacity: isOnline ? [1, 0.7, 1] : 0.5
@@ -305,20 +357,20 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
               }}
             >
               {isOnline ? (
-                <Wifi size={14} className="text-green-300" />
+                <Wifi size={12} className="text-green-300" />
               ) : (
-                <WifiOff size={14} className="text-red-300" />
+                <WifiOff size={12} className="text-red-300" />
               )}
             </motion.div>
             <motion.button
               onClick={onClose}
-              className="p-1.5 hover:bg-black hover:bg-opacity-20 rounded-full transition-colors flex-shrink-0"
+              className="p-1 hover:bg-black hover:bg-opacity-20 rounded-full transition-colors flex-shrink-0"
               aria-label="Stäng bokning"
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <X size={18} />
+              <X size={16} />
             </motion.button>
           </div>
         </motion.div>
@@ -329,9 +381,9 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           className="iframe-modal-content flex-1 relative bg-white overflow-hidden iframe-container"
           onTouchStart={handleTouchStart}
           style={{ 
-            height: 'calc(100vh - 68px)',
-            maxHeight: 'calc(100vh - 68px)',
-            minHeight: 'calc(100vh - 68px)',
+            height: 'calc(100vh - 48px)',
+            maxHeight: 'calc(100vh - 48px)',
+            minHeight: 'calc(100vh - 48px)',
             zIndex: 999998 // CONTENT AREA HIGH Z-INDEX
           }}
           initial={{ opacity: 0 }}
