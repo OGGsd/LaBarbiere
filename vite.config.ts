@@ -110,7 +110,9 @@ export default defineConfig({
         mode: 'production'
       },
       includeAssets: [
-        'La-barbiere-logga-1000-x-500-px-1024x512.png',
+        'Favicon/*.png',
+        'Favicon/favicon.svg',
+        'favicon.ico',
         'offline.html'
       ],
       manifest: {
@@ -134,99 +136,183 @@ export default defineConfig({
         icons: [
           // Icons with "any" purpose - SEPARATE ENTRIES
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/16x16.png',
+            sizes: '16x16',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/32x32.png',
+            sizes: '32x32',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/48x48.png',
+            sizes: '48x48',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/64x64.png',
+            sizes: '64x64',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/72x72.png',
             sizes: '72x72',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/96x96.png',
             sizes: '96x96',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/120x120.png',
+            sizes: '120x120',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/128x128.png',
             sizes: '128x128',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/144x144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/152x152.png',
             sizes: '152x152',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/180x180.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/384x384.png',
             sizes: '384x384',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png', 
+            src: '/Favicon/512x512.png',
             sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/1024x1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'any'
           },
           // Icons with "maskable" purpose - SEPARATE ENTRIES
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/16x16.png',
+            sizes: '16x16',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/32x32.png',
+            sizes: '32x32',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/48x48.png',
+            sizes: '48x48',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/64x64.png',
+            sizes: '64x64',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/72x72.png',
             sizes: '72x72',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/96x96.png',
             sizes: '96x96',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/120x120.png',
+            sizes: '120x120',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/128x128.png',
             sizes: '128x128',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/144x144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/152x152.png',
             sizes: '152x152',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/180x180.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+            src: '/Favicon/384x384.png',
             sizes: '384x384',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/La-barbiere-logga-1000-x-500-px-1024x512.png', 
+            src: '/Favicon/512x512.png',
             sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/1024x1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'maskable'
           }
@@ -239,7 +325,7 @@ export default defineConfig({
             url: '/?category=klippning',
             icons: [
               {
-                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+                src: '/Favicon/96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -252,7 +338,7 @@ export default defineConfig({
             url: '/?category=fargning',
             icons: [
               {
-                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+                src: '/Favicon/96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -265,7 +351,7 @@ export default defineConfig({
             url: 'tel:0365505311',
             icons: [
               {
-                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+                src: '/Favicon/96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -278,7 +364,7 @@ export default defineConfig({
             url: '/?tab=om-oss',
             icons: [
               {
-                src: '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+                src: '/Favicon/96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }

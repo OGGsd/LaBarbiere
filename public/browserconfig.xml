@@ -2,10 +2,10 @@
 <browserconfig>
     <msapplication>
         <tile>
-            <square70x70logo src="/La-barbiere-logga-1000-x-500-px-1024x512.png"/>
-            <square150x150logo src="/La-barbiere-logga-1000-x-500-px-1024x512.png"/>
-            <wide310x150logo src="/La-barbiere-logga-1000-x-500-px-1024x512.png"/>
-            <square310x310logo src="/La-barbiere-logga-1000-x-500-px-1024x512.png"/>
+            <square70x70logo src="/Favicon/72x72.png"/>
+            <square150x150logo src="/Favicon/152x152.png"/>
+            <wide310x150logo src="/Favicon/384x384.png"/>
+            <square310x310logo src="/Favicon/384x384.png"/>
             <TileColor>#000000</TileColor>
         </tile>
     </msapplication>
