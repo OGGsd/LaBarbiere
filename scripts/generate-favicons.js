@@ -1,6 +1,11 @@
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Ensure favicon directory exists
 const faviconDir = path.join(__dirname, '..', 'public', 'Favicon');
