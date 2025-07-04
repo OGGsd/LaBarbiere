@@ -178,9 +178,9 @@ body {
 @media screen and (max-width: 768px) {
   .iframe-container {
     /* Mobile-specific optimizations - exact height calculations */
-    height: calc(100vh - 48px) !important;
-    min-height: calc(100vh - 48px) !important;
-    max-height: calc(100vh - 48px) !important;
+    height: calc(100vh - 112px) !important;
+    min-height: calc(100vh - 112px) !important;
+    max-height: calc(100vh - 112px) !important;
     /* Ensure no extra spacing */
     padding: 0;
     margin: 0;
@@ -214,15 +214,11 @@ body {
     overflow: hidden !important;
   }
 
-  /* Hide header and navigation animations on mobile */
-  .booking-page-header.hidden {
-    transform: translateY(-100%) !important;
-    opacity: 0 !important;
-  }
-
-  .bottom-navigation.hidden {
-    transform: translateY(100%) !important;
-    opacity: 0 !important;
+  /* Keep navigation visible on mobile - just ensure iframe doesn't overlap */
+  .bottom-navigation {
+    z-index: 10000 !important;
+    position: fixed !important;
+    bottom: 0 !important;
   }
 }
 
@@ -230,9 +226,9 @@ body {
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   .iframe-container {
     /* Tablet-specific optimizations */
-    height: calc(100vh - 48px) !important;
-    min-height: calc(100vh - 48px) !important;
-    max-height: calc(100vh - 48px) !important;
+    height: calc(100vh - 112px) !important;
+    min-height: calc(100vh - 112px) !important;
+    max-height: calc(100vh - 112px) !important;
     z-index: 999999 !important;
   }
   
@@ -243,15 +239,11 @@ body {
     z-index: 999997 !important;
   }
 
-  /* Hide header and navigation animations on tablet */
-  .booking-page-header.hidden {
-    transform: translateY(-100%) !important;
-    opacity: 0 !important;
-  }
-
-  .bottom-navigation.hidden {
-    transform: translateY(100%) !important;
-    opacity: 0 !important;
+  /* Keep navigation visible on tablet - just ensure iframe doesn't overlap */
+  .bottom-navigation {
+    z-index: 10000 !important;
+    position: fixed !important;
+    bottom: 0 !important;
   }
 }
 /* Landscape orientation optimizations */
