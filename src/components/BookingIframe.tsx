@@ -16,56 +16,6 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   const loadTimeoutRef = useRef<NodeJS.Timeout>();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Hide header and navigation on mobile/tablet when iframe opens
-  useEffect(() => {
-    const hideHeaderAndNav = () => {
-      // Hide header (logo/heading section)
-      const header = document.querySelector('.booking-page-header');
-      if (header) {
-        (header as HTMLElement).style.transform = 'translateY(-100%)';
-        (header as HTMLElement).style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-        (header as HTMLElement).style.opacity = '0';
-      }
-
-      // Hide bottom navigation
-      const bottomNav = document.querySelector('.bottom-navigation');
-      if (bottomNav) {
-        (bottomNav as HTMLElement).style.transform = 'translateY(100%)';
-        (bottomNav as HTMLElement).style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-        (bottomNav as HTMLElement).style.opacity = '0';
-      }
-    };
-
-    const showHeaderAndNav = () => {
-      // Show header
-      const header = document.querySelector('.booking-page-header');
-      if (header) {
-        (header as HTMLElement).style.transform = 'translateY(0)';
-        (header as HTMLElement).style.opacity = '1';
-      }
-
-      // Show bottom navigation
-      const bottomNav = document.querySelector('.bottom-navigation');
-      if (bottomNav) {
-        (bottomNav as HTMLElement).style.transform = 'translateY(0)';
-        (bottomNav as HTMLElement).style.opacity = '1';
-      }
-    };
-
-    // Check if we're on mobile/tablet
-    const isMobileOrTablet = window.innerWidth <= 1024;
-    
-    if (isMobileOrTablet) {
-      // Small delay to ensure DOM is ready
-      setTimeout(hideHeaderAndNav, 100);
-    }
-
-    return () => {
-      if (isMobileOrTablet) {
-        showHeaderAndNav();
-      }
-    };
-  }, []);
   useEffect(() => {
     // Monitor online/offline status
     const handleOnline = () => setIsOnline(true);
@@ -102,10 +52,11 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
     // Calculate and set proper heights
     const updateHeights = () => {
       const vh = window.innerHeight;
-      // On mobile/tablet, use full viewport since header/nav are hidden
+      // On mobile/tablet, account for iframe header (48px) + bottom navigation (64px)
       const isMobileOrTablet = window.innerWidth <= 1024;
-      const headerHeight = isMobileOrTablet ? 48 : 48; // Keep minimal header for iframe controls
-      const availableHeight = isMobileOrTablet ? vh - headerHeight : vh - headerHeight;
+      const headerHeight = 48; // Iframe header
+      const navHeight = isMobileOrTablet ? 64 : 0; // Bottom navigation on mobile/tablet
+      const availableHeight = vh - headerHeight - navHeight;
       
       if (containerRef.current) {
         containerRef.current.style.height = `${availableHeight}px`;
@@ -381,9 +332,9 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
           className="iframe-modal-content flex-1 relative bg-white overflow-hidden iframe-container"
           onTouchStart={handleTouchStart}
           style={{ 
-            height: 'calc(100vh - 48px)',
-            maxHeight: 'calc(100vh - 48px)',
-            minHeight: 'calc(100vh - 48px)',
+            height: 'calc(100vh - 112px)', // 48px header + 64px navigation
+            maxHeight: 'calc(100vh - 112px)',
+            minHeight: 'calc(100vh - 112px)',
             zIndex: 999998 // CONTENT AREA HIGH Z-INDEX
           }}
           initial={{ opacity: 0 }}
