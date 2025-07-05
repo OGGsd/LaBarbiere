@@ -84,21 +84,33 @@ const svgContent = `
 
 // Favicon sizes to generate
 const sizes = [
-  { size: 1024, name: '1024x1024.png' },
-  { size: 512, name: '512x512.png' },
-  { size: 384, name: '384x384.png' },
-  { size: 192, name: '192x192.png' },
-  { size: 180, name: 'apple-touch-icon.png' },
-  { size: 152, name: '152x152.png' },
-  { size: 144, name: '144x144.png' },
-  { size: 128, name: '128x128.png' },
-  { size: 120, name: '120x120.png' },
-  { size: 96, name: '96x96.png' },
-  { size: 72, name: '72x72.png' },
-  { size: 64, name: '64x64.png' },
-  { size: 48, name: '48x48.png' },
-  { size: 32, name: '32x32.png' },
-  { size: 16, name: '16x16.png' }
+  // Apple Store Required Sizes
+  { size: 1024, name: 'apple-icon-1024x1024.png' },
+  { size: 512, name: 'android-icon-512x512.png' },
+  { size: 192, name: 'android-icon-192x192.png' },
+  { size: 180, name: 'apple-icon-180x180.png' },
+  { size: 152, name: 'apple-icon-152x152.png' },
+  { size: 144, name: 'android-icon-144x144.png' },
+  { size: 144, name: 'apple-icon-144x144.png' },
+  { size: 120, name: 'apple-icon-120x120.png' },
+  { size: 114, name: 'apple-icon-114x114.png' },
+  { size: 96, name: 'android-icon-96x96.png' },
+  { size: 76, name: 'apple-icon-76x76.png' },
+  { size: 72, name: 'android-icon-72x72.png' },
+  { size: 72, name: 'apple-icon-72x72.png' },
+  { size: 60, name: 'apple-icon-60x60.png' },
+  { size: 57, name: 'apple-icon-57x57.png' },
+  { size: 48, name: 'android-icon-48x48.png' },
+  { size: 36, name: 'android-icon-36x36.png' },
+  // Standard favicon sizes
+  { size: 96, name: 'favicon-96x96.png' },
+  { size: 32, name: 'favicon-32x32.png' },
+  { size: 16, name: 'favicon-16x16.png' },
+  // Microsoft tile icons
+  { size: 310, name: 'ms-icon-310x310.png' },
+  { size: 150, name: 'ms-icon-150x150.png' },
+  { size: 144, name: 'ms-icon-144x144.png' },
+  { size: 70, name: 'ms-icon-70x70.png' }
 ];
 
 async function generateFavicons() {
@@ -141,9 +153,25 @@ async function generateFavicons() {
     await sharp(Buffer.from(svgContent))
       .resize(32, 32)
       .png()
-      .toFile(path.join(__dirname, '..', 'public', 'favicon.ico'));
+      .toFile(path.join(faviconDir, 'favicon.ico'));
     
     console.log('✅ Generated root favicon.ico');
+    
+    // Generate apple-icon.png (default Apple Touch Icon)
+    await sharp(Buffer.from(svgContent))
+      .resize(180, 180)
+      .png()
+      .toFile(path.join(faviconDir, 'apple-icon.png'));
+    
+    console.log('✅ Generated apple-icon.png');
+    
+    // Generate apple-icon-precomposed.png
+    await sharp(Buffer.from(svgContent))
+      .resize(180, 180)
+      .png()
+      .toFile(path.join(faviconDir, 'apple-icon-precomposed.png'));
+    
+    console.log('✅ Generated apple-icon-precomposed.png');
     
     console.log('🎉 All favicons generated successfully!');
     
