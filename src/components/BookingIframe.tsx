@@ -31,57 +31,98 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   }, []);
 
   useEffect(() => {
-    // Prevent body scroll when iframe modal is open
+    // CRITICAL: Prevent body scroll and ensure fullscreen on ALL devices
     document.body.classList.add('iframe-modal-open');
+    document.documentElement.classList.add('iframe-modal-open');
     
-    // iOS Safari specific: Prevent zoom on input focus
+    // iOS Safari specific: Prevent zoom and ensure fullscreen
     const viewport = document.querySelector('meta[name=viewport]');
     const originalContent = viewport?.getAttribute('content');
     if (viewport) {
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content');
     }
     
-    // Set a timeout to detect if iframe fails to load (iOS Safari compatibility)
+    // Set timeout for iframe loading
     loadTimeoutRef.current = setTimeout(() => {
       if (isLoading) {
         setHasError(true);
         setIsLoading(false);
       }
-    }, 15000); // 15 second timeout for iOS
+    }, 15000);
 
-    // Calculate and set proper heights
+    // ENHANCED: Calculate exact fullscreen heights for ALL devices
     const updateHeights = () => {
-      const vh = window.innerHeight;
-      // On mobile/tablet, account for iframe header (48px) + bottom navigation (64px)
-      const isMobileOrTablet = window.innerWidth <= 1024;
-      const headerHeight = 48; // Iframe header
-      const navHeight = isMobileOrTablet ? 64 : 0; // Bottom navigation on mobile/tablet
-      const availableHeight = vh - headerHeight - navHeight;
+      // Get actual viewport dimensions
+      const vh = window.visualViewport?.height || window.innerHeight;
+      const vw = window.visualViewport?.width || window.innerWidth;
+      
+      // iPhone/iPad specific calculations
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isAndroid = /Android/.test(navigator.userAgent);
+      
+      // Header height (compact for mobile)
+      const headerHeight = 40; // Reduced for more iframe space
+      
+      // Calculate available height - FULLSCREEN minus minimal header
+      const availableHeight = vh - headerHeight;
+      
+      console.log('Device info:', { isIOS, isAndroid, vh, vw, availableHeight });
       
       if (containerRef.current) {
         containerRef.current.style.height = `${availableHeight}px`;
         containerRef.current.style.maxHeight = `${availableHeight}px`;
+        containerRef.current.style.minHeight = `${availableHeight}px`;
+        containerRef.current.style.width = `${vw}px`;
+        containerRef.current.style.maxWidth = `${vw}px`;
       }
       
       if (iframeRef.current) {
         iframeRef.current.style.height = `${availableHeight}px`;
         iframeRef.current.style.minHeight = `${availableHeight}px`;
+        iframeRef.current.style.maxHeight = `${availableHeight}px`;
+        iframeRef.current.style.width = `${vw}px`;
+        iframeRef.current.style.maxWidth = `${vw}px`;
       }
     };
 
     // Initial height calculation
     updateHeights();
 
-    // Update heights on resize (orientation change, keyboard show/hide)
+    // Enhanced resize handling for mobile devices
     const handleResize = () => {
-      setTimeout(updateHeights, 100); // Small delay for iOS keyboard
+      // Immediate update
+      updateHeights();
+      // Delayed update for iOS keyboard animations
+      setTimeout(updateHeights, 100);
+      setTimeout(updateHeights, 300);
+      setTimeout(updateHeights, 500);
     };
 
+    // Listen to multiple resize events for better mobile support
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', handleResize);
+    
+    // Visual Viewport API for better mobile support (iOS Safari)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleResize);
+      window.visualViewport.addEventListener('scroll', handleResize);
+    }
+
+    // iOS specific: Handle safe area and status bar
+    if (isIOS) {
+      // Force fullscreen on iOS
+      const metaThemeColor = document.querySelector('meta[name=theme-color]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', '#000000');
+      }
+      
+      // Add iOS specific styles
+      document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
+    }
 
     return () => {
       document.body.classList.remove('iframe-modal-open');
+      document.documentElement.classList.remove('iframe-modal-open');
       
       // Restore original viewport
       if (viewport && originalContent) {
@@ -94,6 +135,11 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
 
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
+      
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleResize);
+        window.visualViewport.removeEventListener('scroll', handleResize);
+      }
     };
   }, [isLoading]);
 
@@ -104,11 +150,18 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
       clearTimeout(loadTimeoutRef.current);
     }
 
-    // Ensure iframe takes full available height after load
+    // Ensure iframe takes exact fullscreen after load
     if (iframeRef.current && containerRef.current) {
-      const containerHeight = containerRef.current.clientHeight;
-      iframeRef.current.style.height = `${containerHeight}px`;
-      iframeRef.current.style.minHeight = `${containerHeight}px`;
+      const vh = window.visualViewport?.height || window.innerHeight;
+      const vw = window.visualViewport?.width || window.innerWidth;
+      const headerHeight = 40;
+      const availableHeight = vh - headerHeight;
+      
+      iframeRef.current.style.height = `${availableHeight}px`;
+      iframeRef.current.style.minHeight = `${availableHeight}px`;
+      iframeRef.current.style.maxHeight = `${availableHeight}px`;
+      iframeRef.current.style.width = `${vw}px`;
+      iframeRef.current.style.maxWidth = `${vw}px`;
     }
   };
 
@@ -121,23 +174,23 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   };
 
   const handleFallbackBooking = () => {
-    // iOS Safari compatible external link opening
+    // Enhanced mobile browser opening
     try {
-      // Method 1: Try window.open with specific parameters for iOS
+      // Method 1: Try window.open with mobile-optimized parameters
       const newWindow = window.open(
         bookingUrl, 
         '_blank', 
-        'noopener,noreferrer,width=375,height=667,scrollbars=yes,resizable=yes'
+        'noopener,noreferrer,width=' + (window.screen.width || 375) + ',height=' + (window.screen.height || 667) + ',scrollbars=yes,resizable=yes,fullscreen=yes'
       );
       
-      // Method 2: If popup blocked (common in iOS), use location
+      // Method 2: Fallback for mobile browsers
       setTimeout(() => {
         if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
           window.location.href = bookingUrl;
         }
       }, 100);
     } catch (error) {
-      // Fallback: Direct navigation for VKWebView/TWA
+      // Final fallback: Direct navigation
       window.location.href = bookingUrl;
     }
     onClose();
@@ -147,15 +200,17 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
     setIsLoading(true);
     setHasError(false);
     
-    // Reload iframe with cache busting for iOS
+    // Reload iframe with cache busting
     if (iframeRef.current) {
       const url = new URL(bookingUrl);
       url.searchParams.set('_t', Date.now().toString());
+      url.searchParams.set('mobile', '1');
+      url.searchParams.set('fullscreen', '1');
       iframeRef.current.src = url.toString();
     }
   };
 
-  // Handle postMessage for dynamic height and iOS compatibility
+  // Enhanced postMessage handling for mobile
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       // Security: Only accept messages from allowed domains
@@ -164,15 +219,27 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
         
-        // Handle navigation events for iOS
-        if (data?.type === 'navigation' && data?.url) {
-          console.log('Iframe navigation detected:', data.url);
+        // Handle mobile-specific events
+        if (data?.type === 'mobile_navigation' && data?.url) {
+          console.log('Mobile iframe navigation detected:', data.url);
+        }
+        
+        // Handle fullscreen requests
+        if (data?.type === 'request_fullscreen') {
+          // Already in fullscreen, acknowledge
+          if (iframeRef.current?.contentWindow) {
+            iframeRef.current.contentWindow.postMessage({
+              type: 'fullscreen_active',
+              mobile: true,
+              ios: /iPad|iPhone|iPod/.test(navigator.userAgent),
+              android: /Android/.test(navigator.userAgent)
+            }, '*');
+          }
         }
         
         // Handle completion events
         if (data?.type === 'booking_complete') {
           console.log('Booking completed successfully');
-          // Could trigger success callback here
         }
       } catch (error) {
         console.log('Error parsing postMessage:', error);
@@ -183,18 +250,18 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // iOS Safari specific touch handling
+  // Enhanced touch handling for mobile devices
   const handleTouchStart = (e: React.TouchEvent) => {
     // Prevent iOS Safari from interfering with iframe touch events
     e.stopPropagation();
   };
 
-  // Animation variants
+  // Animation variants optimized for mobile
   const modalVariants = {
     hidden: { 
       opacity: 0,
-      scale: 0.95,
-      y: 50
+      scale: 0.98,
+      y: 20
     },
     visible: { 
       opacity: 1,
@@ -202,44 +269,31 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
       y: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
+        stiffness: 400,
         damping: 30,
-        duration: 0.4
+        duration: 0.3
       }
     },
     exit: { 
       opacity: 0,
-      scale: 0.95,
-      y: 50,
+      scale: 0.98,
+      y: 20,
       transition: {
-        duration: 0.3
+        duration: 0.2
       }
     }
   };
 
   const headerVariants = {
-    hidden: { y: -50, opacity: 0 },
+    hidden: { y: -40, opacity: 0 },
     visible: { 
       y: 0, 
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 400,
+        stiffness: 500,
         damping: 25,
         delay: 0.1
-      }
-    }
-  };
-
-  const loadingVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20
       }
     }
   };
@@ -247,24 +301,42 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
   return (
     <AnimatePresence>
       <motion.div 
-        className="iframe-modal fixed inset-0 bg-black bg-opacity-50 flex flex-col"
-        style={{ zIndex: 999999 }} // ABSOLUTE HIGHEST Z-INDEX - OVERLAPS EVERYTHING INCLUDING NAVIGATION
+        className="iframe-modal fixed inset-0 bg-black bg-opacity-95 flex flex-col"
+        style={{ 
+          zIndex: 2147483647, // Maximum z-index for absolute priority
+          width: '100vw',
+          height: '100vh',
+          maxWidth: '100vw',
+          maxHeight: '100vh',
+          minWidth: '100vw',
+          minHeight: '100vh',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
         variants={modalVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        {/* Compact Header for iframe controls only */}
+        {/* Ultra-compact header for maximum iframe space */}
         <motion.div 
-          className="iframe-modal-header bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-3 py-2 flex items-center justify-between shadow-lg relative h-12 flex-shrink-0"
-          style={{ zIndex: 1000000 }} // HEADER AT THE VERY FRONT
+          className="iframe-modal-header bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white px-2 py-1 flex items-center justify-between shadow-lg relative flex-shrink-0"
+          style={{ 
+            zIndex: 2147483648, // Header at absolute front
+            height: '40px',
+            minHeight: '40px',
+            maxHeight: '40px'
+          }}
           variants={headerVariants}
         >
           <div className="flex items-center min-w-0 flex-1">
             <motion.div
-              className="w-5 h-5 mr-2 rounded-full bg-white p-0.5 flex-shrink-0 flex items-center justify-center"
-              whileHover={{ rotate: 360, scale: 1.2 }}
-              transition={{ duration: 0.6 }}
+              className="w-4 h-4 mr-2 rounded-full bg-white p-0.5 flex-shrink-0 flex items-center justify-center"
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.5 }}
             >
               <img 
                 src="/La-barbiere-logga-1000-x-500-px-1024x512.png" 
@@ -274,31 +346,22 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
             </motion.div>
             <div className="min-w-0 flex-1">
               <motion.h2 
-                className="font-bold text-xs truncate hidden sm:block"
+                className="font-bold text-xs truncate"
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
                 Säker bokning
               </motion.h2>
-              <motion.p 
-                className="text-xs opacity-90 flex items-center truncate hidden md:flex"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 0.9 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Shield size={10} className="mr-1 flex-shrink-0" />
-                <span className="truncate">{serviceName}</span>
-              </motion.p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
-            {/* Animated Online/Offline indicator */}
+          <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
+            {/* Online indicator */}
             <motion.div 
-              className="flex items-center hidden sm:flex"
+              className="flex items-center"
               animate={{
-                scale: isOnline ? [1, 1.2, 1] : 1,
+                scale: isOnline ? [1, 1.1, 1] : 1,
                 opacity: isOnline ? [1, 0.7, 1] : 0.5
               }}
               transition={{
@@ -308,9 +371,9 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
               }}
             >
               {isOnline ? (
-                <Wifi size={12} className="text-green-300" />
+                <Wifi size={10} className="text-green-300" />
               ) : (
-                <WifiOff size={12} className="text-red-300" />
+                <WifiOff size={10} className="text-red-300" />
               )}
             </motion.div>
             <motion.button
@@ -321,40 +384,41 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <X size={16} />
+              <X size={14} />
             </motion.button>
           </div>
         </motion.div>
 
-        {/* Full-Screen Content Area with enhanced animations */}
+        {/* FULLSCREEN Content Area - Takes remaining space */}
         <motion.div 
           ref={containerRef}
           className="iframe-modal-content flex-1 relative bg-white overflow-hidden iframe-container"
           onTouchStart={handleTouchStart}
           style={{ 
-            height: 'calc(100vh - 112px)', // 48px header + 64px navigation
-            maxHeight: 'calc(100vh - 112px)',
-            minHeight: 'calc(100vh - 112px)',
-            zIndex: 999998 // CONTENT AREA HIGH Z-INDEX
+            width: '100vw',
+            maxWidth: '100vw',
+            minWidth: '100vw',
+            flex: '1 1 auto',
+            zIndex: 2147483646, // Content area high z-index
+            position: 'relative'
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.3 }}
+          transition={{ delay: 0.1, duration: 0.2 }}
         >
-          {/* Loading State with enhanced animation */}
+          {/* Loading State */}
           <AnimatePresence>
             {isLoading && (
               <motion.div 
                 className="iframe-modal-overlay absolute inset-0 flex items-center justify-center bg-white"
-                style={{ zIndex: 1000000 }} // LOADING OVERLAY AT THE VERY FRONT
-                variants={loadingVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
+                style={{ zIndex: 2147483649 }} // Loading overlay at absolute front
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
                 <div className="text-center px-4">
                   <motion.div 
-                    className="w-10 h-10 border-b-2 border-emerald-600 rounded-full mx-auto mb-3"
+                    className="w-8 h-8 border-b-2 border-emerald-600 rounded-full mx-auto mb-3"
                     animate={{ rotate: 360 }}
                     transition={{ 
                       duration: 1,
@@ -373,101 +437,60 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
                   >
                     Laddar säker bokning...
                   </motion.p>
-                  <motion.p 
-                    className="text-gray-400 text-xs mt-1"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    Ansluter till bokningssystem
-                  </motion.p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Offline State with enhanced animation */}
+          {/* Offline State */}
           <AnimatePresence>
             {!isOnline && (
               <motion.div 
                 className="iframe-modal-overlay absolute inset-0 flex items-center justify-center bg-white p-4"
-                style={{ zIndex: 1000000 }} // OFFLINE OVERLAY AT THE VERY FRONT
+                style={{ zIndex: 2147483649 }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <div className="text-center max-w-sm">
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, -10, 10, 0],
-                      scale: [1, 1.1, 1]
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <WifiOff size={40} className="text-gray-400 mx-auto mb-3" />
-                  </motion.div>
+                  <WifiOff size={32} className="text-gray-400 mx-auto mb-3" />
                   <h3 className="text-lg font-bold text-gray-800 mb-2">
                     Ingen internetanslutning
                   </h3>
                   <p className="text-gray-600 mb-4 text-sm">
                     Kontrollera din internetanslutning och försök igen.
                   </p>
-                  <div className="space-y-3">
-                    <motion.button
-                      onClick={handleRetry}
-                      className="w-full bg-emerald-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
-                      disabled={!isOnline}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Försök igen
-                    </motion.button>
-                    <div className="flex items-center justify-center text-gray-600 text-sm">
-                      <Phone size={16} className="mr-2" />
-                      <span>Ring: 073-175 95 67</span>
-                    </div>
-                  </div>
+                  <motion.button
+                    onClick={handleRetry}
+                    className="w-full bg-emerald-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                    disabled={!isOnline}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Försök igen
+                  </motion.button>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Error State with enhanced animation */}
+          {/* Error State */}
           <AnimatePresence>
             {hasError && isOnline && (
               <motion.div 
                 className="iframe-modal-overlay absolute inset-0 flex items-center justify-center bg-white p-4"
-                style={{ zIndex: 1000000 }} // ERROR OVERLAY AT THE VERY FRONT
+                style={{ zIndex: 2147483649 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <div className="text-center max-w-sm">
-                  <motion.div
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                      rotate: [0, -5, 5, 0]
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <AlertCircle size={40} className="text-red-500 mx-auto mb-3" />
-                  </motion.div>
+                  <AlertCircle size={32} className="text-red-500 mx-auto mb-3" />
                   <h3 className="text-lg font-bold text-gray-800 mb-2">
                     Kunde inte ladda bokning
                   </h3>
                   <p className="text-gray-600 mb-4 text-sm">
-                    Detta kan bero på webbläsarens säkerhetsinställningar eller tillfälliga problem 
-                    med bokningssystemet. Försök igen eller öppna bokningen i din standardwebbläsare.
+                    Försök igen eller öppna bokningen i din webbläsare.
                   </p>
                   <div className="space-y-3">
                     <motion.button
@@ -486,46 +509,53 @@ const BookingIframe: React.FC<BookingIframeProps> = ({ bookingUrl, serviceName, 
                     >
                       Öppna i webbläsare
                     </motion.button>
-                    <div className="flex items-center justify-center text-gray-600 text-sm">
-                      <Phone size={16} className="mr-2" />
-                      <span>Eller ring: 073-175 95 67</span>
-                    </div>
                   </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Full-Screen Iframe with fade-in animation */}
+          {/* FULLSCREEN Iframe */}
           {isOnline && (
             <motion.iframe
               ref={iframeRef}
-              src={bookingUrl}
+              src={`${bookingUrl}${bookingUrl.includes('?') ? '&' : '?'}mobile=1&fullscreen=1&t=${Date.now()}`}
               className="w-full border-0 bg-white block"
               style={{ 
+                width: '100vw',
+                maxWidth: '100vw',
+                minWidth: '100vw',
                 height: '100%',
                 minHeight: '100%',
                 maxHeight: '100%',
-                zIndex: 999997, // IFRAME CONTENT - Lower than overlays but higher than background
-                // iOS Safari optimizations
+                zIndex: 2147483645, // Iframe content
+                // Enhanced mobile optimizations
                 WebkitOverflowScrolling: 'touch',
-                overflow: 'auto'
+                overflow: 'auto',
+                // iOS Safari specific
+                WebkitTransform: 'translateZ(0)',
+                transform: 'translateZ(0)',
+                // Prevent iOS Safari borders/margins
+                margin: 0,
+                padding: 0,
+                border: 'none',
+                outline: 'none'
               }}
-              // Enhanced security sandbox for iOS compatibility
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+              // Enhanced security sandbox for mobile
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-downloads"
               scrolling="auto"
               onLoad={handleIframeLoad}
               onError={handleIframeError}
               title={`Säker bokning - ${serviceName}`}
-              loading="lazy"
-              // iOS Safari specific attributes
-              allow="payment; geolocation"
+              loading="eager"
+              // Mobile-specific attributes
+              allow="payment; geolocation; camera; microphone; fullscreen"
               referrerPolicy="strict-origin-when-cross-origin"
               // Accessibility
               aria-label={`Bokningsformulär för ${serviceName}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: isLoading ? 0 : 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.3 }}
             />
           )}
         </motion.div>
