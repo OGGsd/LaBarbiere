@@ -110,31 +110,31 @@ export default defineConfig({
         mode: 'production'
       },
       includeAssets: [
-        'favicon/android-icon-36x36.png',
-        'favicon/android-icon-48x48.png',
-        'favicon/android-icon-72x72.png',
-        'favicon/android-icon-96x96.png',
-        'favicon/android-icon-144x144.png',
-        'favicon/apple-icon-152x152.png',
-        'favicon/android-icon-192x192.png',
-        'favicon/apple-icon-57x57.png',
-        'favicon/apple-icon-60x60.png',
-        'favicon/apple-icon-72x72.png',
-        'favicon/apple-icon-76x76.png',
-        'favicon/apple-icon-114x114.png',
-        'favicon/apple-icon-120x120.png',
-        'favicon/apple-icon-144x144.png',
-        'favicon/apple-icon-180x180.png',
-        'favicon/apple-icon-precomposed.png',
-        'favicon/apple-icon.png',
-        'favicon/favicon-16x16.png',
-        'favicon/favicon-32x32.png',
-        'favicon/favicon-96x96.png',
-        'favicon/favicon.ico',
-        'favicon/ms-icon-70x70.png',
-        'favicon/ms-icon-144x144.png',
-        'favicon/ms-icon-150x150.png',
-        'favicon/ms-icon-310x310.png',
+        'Favicon/android-icon-36x36.png',
+        'Favicon/android-icon-48x48.png',
+        'Favicon/android-icon-72x72.png',
+        'Favicon/android-icon-96x96.png',
+        'Favicon/android-icon-144x144.png',
+        'Favicon/android-icon-192x192.png',
+        'Favicon/android-icon-512x512.png',
+        'Favicon/apple-icon-57x57.png',
+        'Favicon/apple-icon-60x60.png',
+        'Favicon/apple-icon-72x72.png',
+        'Favicon/apple-icon-76x76.png',
+        'Favicon/apple-icon-114x114.png',
+        'Favicon/apple-icon-120x120.png',
+        'Favicon/apple-icon-144x144.png',
+        'Favicon/apple-icon-152x152.png',
+        'Favicon/apple-icon-180x180.png',
+        'Favicon/apple-icon-1024x1024.png',
+        'Favicon/favicon-16x16.png',
+        'Favicon/favicon-32x32.png',
+        'Favicon/favicon-96x96.png',
+        'Favicon/favicon.ico',
+        'Favicon/ms-icon-70x70.png',
+        'Favicon/ms-icon-144x144.png',
+        'Favicon/ms-icon-150x150.png',
+        'Favicon/ms-icon-310x310.png',
         'offline.html'
       ],
       manifest: {
@@ -158,87 +158,111 @@ export default defineConfig({
         icons: [
           // PWA Builder & Apple Store Required Icons - "any" purpose
           {
-            src: '/favicon/android-icon-36x36.png',
+            src: '/Favicon/android-icon-36x36.png',
             sizes: '36x36',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/android-icon-48x48.png',
+            src: '/Favicon/android-icon-48x48.png',
             sizes: '48x48',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/android-icon-72x72.png',
+            src: '/Favicon/android-icon-72x72.png',
             sizes: '72x72',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/android-icon-96x96.png',
+            src: '/Favicon/android-icon-96x96.png',
             sizes: '96x96',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/android-icon-144x144.png',
+            src: '/Favicon/android-icon-144x144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/apple-icon-152x152.png',
+            src: '/Favicon/apple-icon-152x152.png',
             sizes: '152x152',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon/android-icon-192x192.png',
+            src: '/Favicon/android-icon-192x192.png',
             sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/android-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Favicon/apple-icon-1024x1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'any'
           },
           // PWA Builder & Apple Store Required Icons - "maskable" purpose
           {
-            src: '/favicon/android-icon-36x36.png',
+            src: '/Favicon/android-icon-36x36.png',
             sizes: '36x36',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/android-icon-48x48.png',
+            src: '/Favicon/android-icon-48x48.png',
             sizes: '48x48',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/android-icon-72x72.png',
+            src: '/Favicon/android-icon-72x72.png',
             sizes: '72x72',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/android-icon-96x96.png',
+            src: '/Favicon/android-icon-96x96.png',
             sizes: '96x96',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/android-icon-144x144.png',
+            src: '/Favicon/android-icon-144x144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/apple-icon-152x152.png',
+            src: '/Favicon/apple-icon-152x152.png',
             sizes: '152x152',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon/android-icon-192x192.png',
+            src: '/Favicon/android-icon-192x192.png',
             sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/android-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/Favicon/apple-icon-1024x1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'maskable'
           }
@@ -251,7 +275,7 @@ export default defineConfig({
             url: '/?category=klippning',
             icons: [
               {
-                src: '/favicon/android-icon-96x96.png',
+                src: '/Favicon/android-icon-96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -264,7 +288,7 @@ export default defineConfig({
             url: '/?category=fargning',
             icons: [
               {
-                src: '/favicon/android-icon-96x96.png',
+                src: '/Favicon/android-icon-96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -277,7 +301,7 @@ export default defineConfig({
             url: 'tel:0365505311',
             icons: [
               {
-                src: '/favicon/android-icon-96x96.png',
+                src: '/Favicon/android-icon-96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
@@ -290,7 +314,7 @@ export default defineConfig({
             url: '/?tab=om-oss',
             icons: [
               {
-                src: '/favicon/android-icon-96x96.png',
+                src: '/Favicon/android-icon-96x96.png',
                 sizes: '96x96',
                 type: 'image/png'
               }
