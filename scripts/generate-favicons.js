@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure favicon directory exists
-const faviconDir = path.join(__dirname, '..', 'public', 'Favicon');
+const faviconDir = path.join(__dirname, '..', 'public', 'favicon');
 if (!fs.existsSync(faviconDir)) {
   fs.mkdirSync(faviconDir, { recursive: true });
 }
@@ -153,7 +153,7 @@ async function generateFavicons() {
     await sharp(Buffer.from(svgContent))
       .resize(32, 32)
       .png()
-      .toFile(path.join(faviconDir, 'favicon.ico'));
+      .toFile(path.join(__dirname, '..', 'public', 'favicon.ico'));
     
     console.log('✅ Generated root favicon.ico');
     
