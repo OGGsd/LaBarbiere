@@ -10,7 +10,12 @@ const STATIC_CACHE_URLS = [
   '/index.html',
   '/offline.html',
   '/manifest.json',
-  '/La-barbiere-logga-1000-x-500-px-1024x512.png'
+  '/La-barbiere-logga-1000-x-500-px-1024x512.png',
+  '/favicon/apple-icon-180x180.png',
+  '/favicon/apple-icon-152x152.png',
+  '/favicon/apple-icon-1024x1024.png',
+  '/favicon/android-icon-192x192.png',
+  '/favicon/android-icon-512x512.png'
 ];
 
 // Install event - cache essential files
